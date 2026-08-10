@@ -23,7 +23,7 @@ public class FileBasedChatMemory implements ChatMemory {
     private final String BASE_DIR;
     private static final Kryo kryo = new Kryo();
 
-    PromptTemplate
+
     static {
         kryo.setRegistrationRequired(false);
         // 设置实例化策略
