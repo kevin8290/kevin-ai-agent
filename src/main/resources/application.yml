@@ -1,0 +1,46 @@
+spring:
+  application:
+    name: kevin-ai-agent
+  profiles:
+    active: local
+
+  ai:
+    dashscope:
+      api-key: 1
+      chat:
+        options:
+          model: qwen-plus
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: gemma3:1b
+server:
+  port: 8125
+  servlet:
+    context-path: /api
+# springdoc-openapi config
+springdoc:
+  swagger-ui:
+#  knife4j 提供 doc.html，不要手动指定 swagger-ui.path，会造成静态资源映射错乱 访问404  http://127.0.0.1:8125/api/doc.html
+#   path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: com.kevin.kevinaiagent.controller
+# knife4j config
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+# searchAPI
+search-api:
+  # ????????? key
+  api-key: ?? API Key
+# ????????? Spring AI ??????
+logging:
+  level:
+    org.springframework.ai: DEBUG
