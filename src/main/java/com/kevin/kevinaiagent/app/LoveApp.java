@@ -2,6 +2,8 @@ package com.kevin.kevinaiagent.app;
 
 import com.kevin.kevinaiagent.advisor.MyLoggerAdvisor;
 import com.kevin.kevinaiagent.chatmemory.FileBasedChatMemory;
+import com.kevin.kevinaiagent.rag.LoveAppRagCustomAdvisorFactory;
+import com.kevin.kevinaiagent.rag.QueryRewriter;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -104,6 +106,9 @@ public class LoveApp {
 
     @Resource
     private VectorStore pgVectorVectorStore;
+
+    @Resource
+    private QueryRewriter queryRewriter;
     /**
      * 和RAG知识库进行对话
      * @param message
@@ -111,8 +116,10 @@ public class LoveApp {
      * @return
      */
     public String doChatWithRag(String message, String chatId) {
+        String rewriteMessage = queryRewriter.doQueryRewrite(message);
         ChatResponse chatResponse = chatClient.prompt()
-                .user(message)
+                //使用改写后的提示词
+                .user(rewriteMessage)
                 .advisors(spec -> spec.param(ChatMemory.CONVERSATION_ID, chatId))
                 //开启日志，便于后续观察
                 .advisors(new MyLoggerAdvisor())
@@ -121,7 +128,11 @@ public class LoveApp {
                 //应用RAG检索增强服务(基于云知识库服务)
                 //.advisors(loveAppRagCloudAdvisor)
                 //应用RAG检索增强服务(基于PGVector向量数据库服务)
-                .advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
+                //.advisors(new QuestionAnswerAdvisor(pgVectorVectorStore))
+                .advisors(
+                        LoveAppRagCustomAdvisorFactory.createLoveAppRagCustomAdvisor
+                                (loveAppVectorStore,"单身")
+                )
                 .call()
                 .chatResponse();
         String content = chatResponse.getResult().getOutput().getText();
