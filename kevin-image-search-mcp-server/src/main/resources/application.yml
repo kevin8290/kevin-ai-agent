@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: kevin-image-search-mcp-server
+  profiles:
+    active: sse
+server:
+  port: 8127
+  tomcat:
+    connection-timeout: 120000 # 连接总超时120秒
+  servlet:
+    async:
+      request-timeout: 120000 # 【重点】异步请求超时，单位ms，这里设置2分钟

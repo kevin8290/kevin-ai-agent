@@ -1,10 +1,8 @@
 package com.kevin.kevinaiagent.app;
 
-import com.alibaba.cloud.ai.dashscope.chat.DashScopeChatModel;
 import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.UUID;
@@ -70,7 +68,20 @@ class LoveAppTest {
     private void testMessage(String message) {
         String chatId = UUID.randomUUID().toString();
         String response = loveApp.doChatWithTools(message, chatId);
-        System.out.println(response);
+        Assertions.assertNotNull(response);
+    }
+
+
+    @Test
+    public void doChatWithMcp() {
+        String chatId = UUID.randomUUID().toString();
+       /* String message ="我的另一半居住在杭州西湖区，请帮我找到5公里内合适的约会地点";
+        String response = loveApp.doChatWithMcp(message, chatId);
+        Assertions.assertNotNull(response);*/
+        // 测试图片搜索 MCP
+        String message = "帮我搜索一些哄另一半开心的图片";
+        String answer =  loveApp.doChatWithMcp(message, chatId);
+        Assertions.assertNotNull(answer);
     }
 
 
