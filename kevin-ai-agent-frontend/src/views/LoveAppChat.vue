@@ -33,7 +33,7 @@ function handleSend(text) {
     },
     onError: () => {
       if (!messages.value[aiMessageIndex].content) {
-        messages.value[aiMessageIndex].content = '连接失败，请确认后端服务已启动（端口 8125）。'
+        messages.value[aiMessageIndex].content = '连接失败，请确认后端服务可用。'
       }
     },
     onComplete: () => {
